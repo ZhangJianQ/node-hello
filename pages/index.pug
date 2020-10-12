@@ -1,0 +1,12 @@
+extends layout.pug
+
+block content
+  .clearfix
+      img(src="https://tse1-mm.cn.bing.net/th/id/OIP.3mstCkx7kouzPFYvIMrGqgHaE8?pid=Api&rs=1" alt="")
+      ul.list-group
+        each article in articles
+          li.list-group-item
+            a(href="/item/"+article.id)= article.title
+            p= article.body
+      .clearfix
+        a(href="/submit") 添加新闻

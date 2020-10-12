@@ -1,0 +1,43 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title #{title}
+    link(rel="stylesheet", href="/css/index.css")
+    link(href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css", rel="stylesheet")
+    block scripts
+  body
+    //- 头部
+    header
+      .navbar.navbar-default
+        .container-fluid
+          .navbar-header
+            a.navbar-brand Brand
+          ul.nav.navbar-nav
+            li.active
+              a(href="/") Home
+            li
+              a(href="/submit") 添加新闻
+          ul.nav.navbar-nav.navbar-right
+            if user
+              li 
+                a(href="logout") 退出
+            else
+              li
+                a(href="/register") 注册
+              li
+                a(href="/login") 登录
+
+    .container
+      != messages('message', locals)
+      if errors
+        each error, i in errors
+          div(class="alert alert-danger") #{error.msg}
+      block content
+    //- 底部
+    footer
+        .clearfix 联系我们
+  script(src="https://cdn.bootcdn.net/ajax/libs/jquery/1.9.1/jquery.min.js")
+  script(src="/js/main.js")
+

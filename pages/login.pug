@@ -1,0 +1,17 @@
+extends layout.pug
+
+block content
+    .col-sm-offset-3.col-sm-6
+        h1.text-center Login
+        form.form-horizontal(action="/login" ,="" method="POST")
+            .form-group
+            label.control-label.col-sm-2(for="username") 账号
+            div.col-sm-10
+                input#username.form-control(name="username" type="text")
+            .form-group
+            label.control-label.col-sm-2(for="password") 密码
+            div.col-sm-10
+                input#password.form-control(name="password" type="password")
+            .form-group
+            .col-sm-offset-2.col-sm-10
+                button.btn.btn-default(type="submit") 提交

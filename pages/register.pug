@@ -1,0 +1,25 @@
+extends layout.pug
+
+block content
+  .col-sm-offset-3.col-sm-6
+    h1.text-center Register
+    form.form-horizontal(action="/register" ,="" method="POST")
+      .form-group
+        label.control-label.col-sm-2(for="name") 用户名
+        div.col-sm-10
+          input#title.form-control(name="name" type="text")
+      .form-group
+        label.control-label.col-sm-2(for="email") 邮箱
+        div.col-sm-10
+          input#title.form-control(name="email" type="text")
+      .form-group
+        label.control-label.col-sm-2(for="username") 账号
+        div.col-sm-10
+          input#title.form-control(name="username" type="text")
+      .form-group
+        label.control-label.col-sm-2(for="password") 密码
+        div.col-sm-10
+          input#title.form-control(name="password" type="password")
+      .form-group
+        .col-sm-offset-2.col-sm-10
+          button.btn.btn-default(type="submit") 提交

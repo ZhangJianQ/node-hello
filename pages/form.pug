@@ -1,0 +1,19 @@
+extends layout.pug
+
+block content
+  form.form-horizontal(action="/add" ,="" method="POST")
+    .form-group
+      label.control-label.col-sm-2(for="title") 标题
+      div.col-sm-10
+        input#title.form-control(name="title" type="text")
+    .form-group
+      label.control-label.col-sm-2(for="author") 作者
+      div.col-sm-10
+        input#title.form-control(name="author" type="text")
+    .form-group
+      label.control-label.col-sm-2(for="body") 内容
+      div.col-sm-10
+        textarea#content.form-control(name="body" cols="30" rows="10")
+    .form-group
+      .col-sm-offset-2.col-sm-10
+        button.btn.btn-default(type="submit") 提交

@@ -1,0 +1,10 @@
+extends layout.pug
+
+block content
+    h1= article.title
+    h5 Write By: #{article.author}
+    p= article.body
+    hr
+    .btn-group(role="group")
+        a.btn.btn-primary(href="/edit/"+article.id) 编辑
+        a#delete-btn.btn.btn-danger(data-id=article.id) 删除
