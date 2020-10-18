@@ -1,6 +1,7 @@
 const querystring = require("querystring");
 // mongodb连接工具
 const mongoose = require("mongoose");
+const fs = require("fs");
 // 数据库表对象集合（表设计信息）
 const Article = require("./article");
 const User = require("./user");
@@ -62,6 +63,16 @@ module.exports.index = function (req, res) {
   });
 };
 
+// 书籍列表页
+module.exports.books = function (req, res) {
+  fs.readFile("./output.txt", (err, data) => {
+    if (err) return console.log(err);
+    res.render("books", {
+      title: "书籍列表",
+      books: JSON.parse(data.toString("utf-8")),
+    });
+  });
+};
 // 信息新增界面
 module.exports.submit = function (req, res) {
   // res.sendFile(path.join(__dirname, "../", "pages", "form.html"), errorHandle);

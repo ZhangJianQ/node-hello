@@ -22,6 +22,8 @@ router.get("*", (req, res, next) => {
 
 router.get(/^\/(index)?$/, components.index);
 
+router.get("/books", components.books);
+
 router.get("/submit", components.submit);
 
 router.post(

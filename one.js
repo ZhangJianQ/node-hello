@@ -95,129 +95,59 @@ require("events").EventEmitter.defaultMaxListeners = 15;
 //   console.log(resp);
 // });
 
-// 爬取电子书网站的电子书名称和下载地址
-// 获取所有电子书的数目
-// const Book = require("./modules/book");
-// // mongodb连接工具
-// const mongoose = require("mongoose");
-// const config = require("./utils/config");
-// // 连接数据库
-// mongoose.connect(config.database);
-// const db = mongoose.connection;
-
-// const options = {
-//   // 浏览器窗口设置
-//   defaultViewport: {
-//     width: 1440,
-//     height: 800,
-//   },
-//   headless: false, //有界面浏览
-//   slowMo: 250, //每个操作步骤的延迟
-// };
-// const host = "http://www.iqishu.la/soft/sort01/";
-
-// function saveBook(data) {
-//   let book = new Book();
-
-//   book.name = data.name;
-//   book.page = data.page;
-//   book.download = data.download;
-
-//   book.save((err) => {
-//     if (err) return console.log(err);
-//     // 保存成功
-//     console.log("存储成功");
-//   });
+// 下载函数
+// function downloadBook(book) {
+//   console.log("开始下载: " + book.name);
+//   axios
+//     .get(encodeURI(book.download), { responseType: "stream" })
+//     .then((resp) => {
+//       // 使用管道写入文件流
+//       const ws = fs.createWriteStream(
+//         path.join(__dirname, "books", book.name + ".zip")
+//       );
+//       resp.data.pipe(ws);
+//       ws.on("end", () => {
+//         console.log("下载完毕");
+//       });
+//     })
+//     .catch((error) => {
+//       console.log("Error: " + error.code);
+//     });
 // }
-// // Promise对象
+// 下载电子书
+// downloadBook({
+//   page: "http://www.iqishu.la/Shtml80111.html",
+//   name: "《写写小说就无敌了》全集",
+//   download: "http://txt.bookshuku.com/home/down/zip/id/4060",
+// });
+
 // (async () => {
 //   const browser = await puppeteer.launch({
 //     headless: false,
 //   });
-//   // 获取小说数量
-//   async function getTotal(url) {
+
+//   async function getTime(url) {
 //     const page = await browser.newPage();
-//     await page.goto(url);
+//     page.goto(url);
 
-//     // 获取电子书数量
-//     const pagination = await page.$eval(
-//       ".tspage",
-//       (el) => el.childNodes[0].textContent
-//     );
-//     page.close();
+//     // const info = await page.evaluateHandle(() => window.__INITIAL_STATE__);
+//     // console.log(await info.jsonValue());
+//     // const result = await page.evaluate(() => {
+//     //   window.onload = function () {
+//     //     alert(window.__INITIAL_STATE__);
+//     //   };
 
-//     return pagination.match(/总数(\d+)/)[1];
-//   }
-
-//   async function getPageByNumber(num) {
-//     let url = "http://www.iqishu.la/soft/sort01/index_" + num + ".html";
-//     const page = await browser.newPage();
-//     await page.goto(url);
-
-//     const list = await page.$$eval(".listBox li>a", (els) =>
-//       els.map((el) => {
-//         return {
-//           page: new URL(el.getAttribute("href"), "http://www.iqishu.la").href,
-//           name: el.textContent,
-//           url: "",
-//         };
-//       })
-//     );
-//     list.forEach((item) => {
-//       getDownloadUrl(item);
-//     });
-//     page.close();
-
-//     return list;
-//   }
-
-//   async function getDownloadUrl(book) {
-//     const page = await browser.newPage();
-//     await page.goto(book.page);
-
-//     book.download = await page.$$eval(".downButton", (els) =>
-//       els[els.length - 1].getAttribute("href")
-//     );
-
-//     // 保存到文件
-//     // fs.appendFile("output.txt", JSON.stringify(book) + "\n", (err) => {
-//     //   if (err) throw err;
-//     //   console.log(book.title + "写入完成");
+//     //   return;
 //     // });
 
-//     // 保存到数据库
-//     saveBook(book);
-
-//     page.close();
+//     // const executionContext = await page.mainFrame().executionContext();
+//     // const result = await executionContext.evaluate(() =>
+//     //   Promise.resolve(8 * 7)
+//     // );
+//     // console.log(result); // 输出 "56"
 //   }
-//   // getTotal(host);
 
-//   // await browser.close();
+//   getTime(
+//     "https://www.bilibili.com/video/BV1dz4y1o7XS/?spm_id_from=333.788.videocard.0"
+//   );
 // })();
-
-function downloadBook(book) {
-  console.log("开始下载: " + book.name);
-  axios
-    .get(encodeURI(book.download), { responseType: "stream" })
-    .then((resp) => {
-      // 使用管道写入文件流
-      const ws = fs.createWriteStream(
-        path.join(__dirname, "books", book.name + ".zip")
-      );
-      resp.data.pipe(ws);
-      ws.on("end", () => {
-        console.log("下载完毕");
-      });
-    })
-    .catch((error) => {
-      console.log("Error: " + error.code);
-    });
-}
-
-// getPageByNumber(1);
-
-downloadBook({
-  page: "http://www.iqishu.la/Shtml80111.html",
-  name: "《写写小说就无敌了》全集",
-  download: "http://txt.bookshuku.com/home/down/zip/id/4060",
-});

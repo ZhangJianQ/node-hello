@@ -5,6 +5,30 @@ let bookSchema = mongoose.Schema({
     type: String,
     require: true,
   },
+  cover: {
+    type: String,
+    require: false,
+  },
+  author: {
+    type: String,
+    require: true,
+  },
+  size: {
+    type: String,
+    require: true,
+  },
+  rank: {
+    type: String,
+    require: false,
+  },
+  brief: {
+    type: String,
+    require: false,
+  },
+  date: {
+    type: Date,
+    require: true,
+  },
   page: {
     type: String,
     require: true,
