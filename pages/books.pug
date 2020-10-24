@@ -30,15 +30,14 @@ block content
                       span= book.date_format
                   p= book.brief
       nav(aria-label="Page navigation")
-        span= page
         ul.pagination
           li
-            a(href="#" aria-label="Previous")
+            a(href="javascript:;" aria-label="Previous")
               span(aria-hidden="true") «
           - for (let n = 1; n <= 5; n++)
             - var active = page == n
             li(class=active ? 'active' : '')
               a(href="/books?page="+n)= n
           li
-            a(href="#" aria-label="Next")
+            a(href="javascript:;" aria-label="Next")
               span(aria-hidden="true") »

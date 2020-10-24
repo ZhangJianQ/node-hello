@@ -9,3 +9,8 @@ block content
             p= article.body
       .clearfix
         a(href="/submit") 添加新闻
+
+      .clear
+        form(action="/upload", method="POST", enctype="multipart/form-data")
+          input(type="file", name="avatar")
+          button(type="submit") 上传

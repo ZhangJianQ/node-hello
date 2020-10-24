@@ -2,6 +2,7 @@ const moment = require("moment");
 // mongodb连接工具
 const mongoose = require("mongoose");
 const fs = require('fs')
+const path = require('path')
 const url = require("url");
 const querystring = require('querystring')
 // 数据库表对象集合（表设计信息）
@@ -14,6 +15,7 @@ const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const config = require("../utils/config");
 const passport = require("passport");
+const mime = require('mime')
 
 function errorHandle(err) {
   if (err) {
@@ -50,8 +52,7 @@ module.exports.index = function (req, res) {
 
     res.render("index", {
       title: "新闻列表",
-      articles,
-      path: '/'
+      articles
     });
   });
 };
@@ -131,11 +132,11 @@ module.exports.item = function (req, res) {
     if (err) return console.log(err);
     User.findById(article.author, (err, user) => {
       article.author = user.username;
-    });
 
-    res.render("item", {
-      title: article.title,
-      article,
+      res.render("item", {
+        title: article.title,
+        article,
+      });
     });
   });
 };
@@ -240,3 +241,28 @@ module.exports.logout = function (req, res, next) {
   req.flash("success", "You can login again");
   res.redirect("/login");
 };
+
+
+module.exports.upload = function (req, res, next) {
+  /**
+  * req.file
+  * {
+  *  fieldname:'avatar', // 上传文件名，对应input的nanme属性值
+  *  originalname: '', // 文件原始名
+  *  encoding: '',
+  *  mimetype: '',
+  *  size: '',
+  *  filename:''
+  * }
+  */
+  const file = req.file;
+  const oldname = path.join(__dirname, '../', 'upload', file.filename)
+  const newname = oldname + '.' + mime.getExtension(file.mimetype)
+  fs.rename(oldname, newname, (err) => {
+    if (err) throw err;
+
+  });
+
+
+  res.send('<img src="/upload/' + path.parse(newname).base + '"/>')
+}

@@ -14,6 +14,10 @@ const express = require("express");
 const router = express.Router();
 const { body } = require("express-validator");
 
+// 文件上传
+const multer = require('multer')
+const upload = multer({ dest: './upload' })
+
 router.get("*", (req, res, next) => {
   res.locals.user = req.user || null;
   next();
@@ -42,5 +46,8 @@ router.post("/edit/:id", components.edit);
 router.get("/item/:id", components.item);
 
 router.delete("/delete/:id", components.delete);
+
+router.post('/upload', upload.single('avatar'), components.upload)
+
 
 module.exports = router;

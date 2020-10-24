@@ -90,6 +90,7 @@ server.use(passport.session());
 // 处理静态资源
 const static = express.static(path.join(__dirname, "public"));
 // 表示在处理根路径的时候将根路径处理成./public；比如静态资源./css/index.css，实际访问的路径是./public/css/index.css
+server.use('/upload/', express.static(path.join(__dirname, 'upload')))
 server.use("/", static);
 
 // 路由和响应
