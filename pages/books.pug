@@ -2,9 +2,43 @@ extends layout.pug
 
 block content
   .clearfix
-      img(src="https://tse1-mm.cn.bing.net/th/id/OIP.3mstCkx7kouzPFYvIMrGqgHaE8?pid=Api&rs=1" alt="")
       ul.list-group
         each book in books
           li.list-group-item
-            a(href=book.page)= book.name
-            p= book.brief
+            .row
+              .col-xs-6.col-md-2
+                a.thumbnail(href=book.page)
+                  img(src=book.cover, alt=book.name)
+              .col-xs-6.col-md-10
+                .caption
+                  a(href=book.page, target="_blank")
+                    h3= book.name
+                  .row
+                    .col-xs-3
+                      label 作者：
+                      span= book.author
+                    .col-xs-3
+                      label 大小：
+                      span= book.size
+                      span  M
+                    .col-xs-3
+                      label 评级：
+                      - for (let n = 0; n < book.rank; n++)
+                        span.glyphicon.glyphicon-star
+                    .col-xs-3
+                      label 更新日期：
+                      span= book.date_format
+                  p= book.brief
+      nav(aria-label="Page navigation")
+        span= page
+        ul.pagination
+          li
+            a(href="#" aria-label="Previous")
+              span(aria-hidden="true") «
+          - for (let n = 1; n <= 5; n++)
+            - var active = page == n
+            li(class=active ? 'active' : '')
+              a(href="/books?page="+n)= n
+          li
+            a(href="#" aria-label="Next")
+              span(aria-hidden="true") »

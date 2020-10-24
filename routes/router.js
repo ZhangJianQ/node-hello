@@ -15,7 +15,6 @@ const router = express.Router();
 const { body } = require("express-validator");
 
 router.get("*", (req, res, next) => {
-  console.log("User: " + req.user);
   res.locals.user = req.user || null;
   next();
 });

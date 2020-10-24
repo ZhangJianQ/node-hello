@@ -1,27 +1,19 @@
-const querystring = require("querystring");
+const moment = require("moment");
 // mongodb连接工具
 const mongoose = require("mongoose");
-const fs = require("fs");
+const fs = require('fs')
+const url = require("url");
+const querystring = require('querystring')
 // 数据库表对象集合（表设计信息）
 const Article = require("./article");
 const User = require("./user");
+const Book = require('./book')
 // 信息验证
 const { validationResult } = require("express-validator");
 // 加密工具
 const bcrypt = require("bcryptjs");
 const config = require("../utils/config");
 const passport = require("passport");
-
-const getBody = function (req, callback) {
-  let body = "";
-  req.on("data", (chunk) => {
-    body += chunk;
-  });
-
-  req.on("end", () => {
-    callback(querystring.parse(body));
-  });
-};
 
 function errorHandle(err) {
   if (err) {
@@ -59,19 +51,30 @@ module.exports.index = function (req, res) {
     res.render("index", {
       title: "新闻列表",
       articles,
+      path: '/'
     });
   });
 };
 
 // 书籍列表页
 module.exports.books = function (req, res) {
-  fs.readFile("./output.txt", (err, data) => {
-    if (err) return console.log(err);
-    res.render("books", {
-      title: "书籍列表",
-      books: JSON.parse(data.toString("utf-8")),
-    });
-  });
+  const params = querystring.parse(url.parse(req.url).query)
+  const _page = params.page - 1
+  Book.find({}).skip(_page * 15)
+    .limit(15).exec((err, books) => {
+      if (err) return console.log(err);
+      // 格式化日期
+      books.forEach(book => {
+        book.date_format = moment(book.date).format('Y-M-D')
+      })
+
+      res.render("books", {
+        title: "书籍列表",
+        books,
+        page: params.page || 1,
+        path: '/books'
+      });
+    })
 };
 // 信息新增界面
 module.exports.submit = function (req, res) {
@@ -79,6 +82,7 @@ module.exports.submit = function (req, res) {
 
   res.render("form", {
     title: "新闻编辑",
+    path: '/submit'
   });
 };
 
@@ -89,7 +93,7 @@ module.exports.form = function (req, res) {
 
     res.render("edit", {
       title: "文章编辑",
-      article,
+      article
     });
   });
 };

@@ -1,4 +1,4 @@
-// 爬虫常规操作，使用puppeteer爬取壁纸网站上的资源
+// 爬取网站上的电子书和下载地址
 const puppeteer = require("puppeteer");
 const cheerio = require("cheerio");
 const fs = require("fs");
@@ -39,14 +39,12 @@ function saveBook(data) {
   book.save((err) => {
     if (err) return console.log(err);
     // 保存成功
-    console.log("存储成功");
+    console.log(data.name + "存储成功");
   });
 }
 // Promise对象
 (async () => {
-  const browser = await puppeteer.launch({
-    headless: false,
-  });
+  const browser = await puppeteer.launch();
   // 获取小说数量
   async function getTotal(url) {
     const page = await browser.newPage();
@@ -63,10 +61,10 @@ function saveBook(data) {
   }
 
   async function getPageByNumber(num) {
+    console.log("开始解析第" + num + "页");
     let url = "http://www.iqishu.la/soft/sort01/index_" + num + ".html";
     const page = await browser.newPage();
     await page.goto(url);
-
     await page.exposeFunction("cheerio", (html) => cheerio.load(html));
 
     const list = await page.$$eval(".listBox li>a", (els) =>
@@ -99,6 +97,7 @@ function saveBook(data) {
     });
     await page.close();
 
+    console.log("第" + num + "页解析完毕");
     return list;
   }
 
@@ -111,19 +110,19 @@ function saveBook(data) {
     );
 
     // 保存到文件
-    fs.appendFile("output.txt", JSON.stringify(book) + "\n", (err) => {
-      if (err) throw err;
-      console.log(book.name + "写入完成");
-    });
+    // fs.appendFile("output.txt", JSON.stringify(book) + "\n", (err) => {
+    //   if (err) throw err;
+    //   console.log(book.name + "写入完成");
+    // });
 
     // 保存到数据库
-    // saveBook(book);
+    saveBook(book);
 
     page.close();
   }
   // getTotal(host);
   // 按页面获取电子书信息;
-  getPageByNumber(1);
+  getPageByNumber(4);
 
   // await browser.close();
 })();

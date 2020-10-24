@@ -19,4 +19,19 @@ $(function () {
       //
     }
   });
+
+
+  $('.nav li').each(setActivedNav)
 });
+
+
+function setActivedNav(index, item) {
+  const path = location.pathname;
+  const el = $(item)
+
+  if (path === el.find('a').attr('href')) {
+    el.addClass('active')
+  } else {
+    el.removeClass('active')
+  }
+}
